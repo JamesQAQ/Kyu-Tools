@@ -1,3 +1,4 @@
+import argparse
 import pygetwindow
 
 from config import WindowConfig, CONFIGS
@@ -20,9 +21,16 @@ def isRealWindow(window: pygetwindow.Win32Window) -> bool:
 
 
 if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--list', action='store_true', help='list current windows')
+  args = parser.parse_args()
+
   for window in pygetwindow.getAllWindows():
     if isRealWindow(window):
-      config = getConfig(window)
-      if config:
-        window.moveTo(config.position[0], config.position[1])
-        window.resizeTo(config.size[0], config.size[1])
+      if not args.list:
+        config = getConfig(window)
+        if config:
+          window.moveTo(config.position[0], config.position[1])
+          window.resizeTo(config.size[0], config.size[1])
+      else:
+        print(window)
